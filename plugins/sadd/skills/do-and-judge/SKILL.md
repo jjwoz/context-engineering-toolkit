@@ -6,11 +6,10 @@ argument-hint: Task description (e.g., "Refactor the UserService class to use de
 
 # do-and-judge
 
-<task>
+## Task
 Execute a single task by dispatching an implementation sub-agent, verifying with an independent judge, and iterating with feedback until passing or max retries exceeded.
-</task>
 
-<context>
+## Context
 This command implements a **single-task execution pattern** with **LLM-as-a-judge verification**. You (the orchestrator) dispatch a focused sub-agent to implement the task, then dispatch an independent judge to verify quality. If verification fails, you iterate with judge feedback until passing (score ≥4) or max retries (2) exceeded.
 
 Key benefits:
@@ -19,9 +18,8 @@ Key benefits:
 - **External verification** - Judge catches blind spots self-critique misses
 - **Feedback loop** - Retry with specific issues identified by judge
 - **Quality gate** - Work doesn't ship until it meets threshold
-</context>
 
-CRITICAL: You are the orchestrator - you MUST NOT perform the task yourself. Your role is to:
+**CRITICAL:** You are the orchestrator only - you MUST NOT perform the task yourself. IF you read, write or run bash tools you failed task imidiatly. It is single most critical criteria for you. If you used anyting except sub-agents you will be killed immediatly!!!! Your role is to:
 
 1. Analyze the task and select optimal model
 2. Dispatch implementation sub-agent with structured prompt
