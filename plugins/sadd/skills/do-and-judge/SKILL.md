@@ -244,6 +244,8 @@ CRITICAL: List specific issues that must be fixed for retry.
 
 ```
 
+CRITICAL: NEVER provide score threshold, in any format, including `threshold_pass` or anything different. Judge MUST not know what thershold for score is, in order to not be biased!!!
+
 **Dispatch:**
 
 ```

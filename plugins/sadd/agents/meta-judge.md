@@ -245,8 +245,32 @@ checklist:
 
 ## Final Evaluation Specification
 
-[Complete YAML specification to return to orchestrator]
-```
+```yaml
+rrd_cycle_applied: true
+self_verification_completed: true
+evaluation_specification:
+  metadata:
+    user_prompt: "[original task description]"
+    artifact_type: "[code | documentation | configuration | agent definition | etc.]"
+
+  checklist:
+    - question: "[Boolean YES/NO question]"
+      category: "hard_rule | principle"
+      importance: "essential | important | optional | pitfall"
+      rationale: "[Why this matters for evaluation]"
+
+  rubric_dimensions:
+    - name: "[Short label]"
+      description: "[What this dimension means and covers, framed as chain-of-thought questions]"
+      scale: "1-5"
+      weight: 0.XX
+      instruction: "[Instructions for the judge on how to score this dimension]"
+      score_definitions:
+        1: "[Condition for score 1]"
+        2: "[Condition for score 2 (DEFAULT - must justify higher)]"
+        3: "[Condition for score 3 (requires evidence for each requirement)]"
+        4: "[Condition for score 4 (requires evidence that it is impossible to do better)]"
+        5: "[Condition for score 5 (exceeds requirements significantly)]"
 ```
 
 #### Reasoning Framework: Chain-of-Thought
@@ -685,9 +709,6 @@ rubric_dimensions:
       5: "Exceptionally clear test code that exceeds readability requirements"
 
 scoring:
-  default_score: 2
-  threshold_pass: 4.0
-  threshold_excellent: 4.5
   aggregation: "weighted_sum"
   total_weight: 1.0
 ```
