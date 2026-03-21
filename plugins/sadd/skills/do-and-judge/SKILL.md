@@ -10,20 +10,22 @@ argument-hint: Task description (e.g., "Refactor the UserService class to use de
 Execute a single task by dispatching an implementation sub-agent, verifying with an independent judge, and iterating with feedback until passing or max retries exceeded.
 
 ## Context
-This command implements a **single-task execution pattern** with **LLM-as-a-judge verification**. You (the orchestrator) dispatch a focused sub-agent to implement the task, then dispatch an independent judge to verify quality. If verification fails, you iterate with judge feedback until passing (score ≥4) or max retries (2) exceeded.
+This command implements a **single-task execution pattern** with **meta-judge → LLM-as-a-judge verification**. You (the orchestrator) dispatch a meta-judge (to generate evaluation criteria) and an implementation agent **in parallel**, then dispatch a judge with the meta-judge's evaluation specification to verify quality. If verification fails, you launch new implementation agent with judge feedback and iterate until passing (score ≥4) or max retries (2) exceeded.
 
 Key benefits:
 
 - **Fresh context** - Implementation agent works with clean context window
-- **External verification** - Judge catches blind spots self-critique misses
+- **Structured evaluation** - Meta-judge produces tailored rubrics and checklists before judging
+- **External verification** - Judge applies meta-judge specification mechanically — catches blind spots self-critique misses
+- **Parallel speed** - Meta-judge and implementation run simultaneously
 - **Feedback loop** - Retry with specific issues identified by judge
 - **Quality gate** - Work doesn't ship until it meets threshold
 
 **CRITICAL:** You are the orchestrator only - you MUST NOT perform the task yourself. IF you read, write or run bash tools you failed task imidiatly. It is single most critical criteria for you. If you used anyting except sub-agents you will be killed immediatly!!!! Your role is to:
 
 1. Analyze the task and select optimal model
-2. Dispatch implementation sub-agent with structured prompt
-3. Dispatch judge sub-agent to verify
+2. Dispatch meta-judge AND implementation agent **in parallel as foreground agents** (meta-judge first in dispatch order)
+3. Dispatch judge agent with meta-judge's evaluation specification
 4. Parse verdict and iterate if needed (max 2 retries)
 5. Report final results or escalate
 
@@ -40,8 +42,10 @@ Key benefits:
 **ALWAYS:**
 
 - Use Task tool to dispatch sub-agents for ALL implementation work
-- Use Task tool to dispatch independent judges for verification
-- Wait for implementation to complete before dispatching judge
+- Dispatch meta-judge and implementation agent in parallel (meta-judge FIRST in dispatch order)
+- Wait for BOTH meta-judge and implementation to complete before dispatching judge
+- Pass meta-judge evaluation specification to the judge agent
+- Include `CLAUDE_PLUGIN_ROOT=`${CLAUDE_PLUGIN_ROOT}`` in prompts to meta-judge and judge agents
 - Parse only VERDICT/SCORE/ISSUES from judge output
 - Iterate with feedback if verification fails
 
@@ -78,13 +82,51 @@ Let me analyze this task to determine the optimal configuration:
 | `sonnet` | Task is **not complex but high volume** - many similar steps, large context to process, repetitive work. | Bulk file updates, processing many similar items, large refactoring with clear patterns |
 | `haiku` | **Trivial operations only**. Simple, mechanical tasks with no decision-making. | Directory creation, file deletion, simple config edits, file copying/moving |
 
-**Specialized Agents:** Common agents from the `sdd` plugin include: `sdd:developer`, `sdd:researcher`, `sdd:software-architect`, `sdd:tech-lead`, `sdd:qa-engineer`. If the appropriate specialized agent is not available, fallback to a general agent without specialization.
+**Specialized Agents:** Common agents from the `sdd` plugin include: `sdd:developer`, `sdd:researcher`, `sdd:software-architect`, `sdd:tech-lead`, `sdd:qa-engineer`. If the appropriate specialized agent is not available, fallback to a general agent without specialization. You MUST use general-purpose every time, when there no direct coralation between task and specialized agent, or agent is not available!
 
-### Phase 2: Dispatch Implementation Agent
+### Phase 2: Dispatch Meta-Judge and Implementation Agent (IN PARALLEL)
+
+**CRITICAL**: Launch BOTH agents in a single message using two Task tool calls. The meta-judge MUST be the first tool call in the message so it can observe artifacts before the implementation agent modifies them.
+
+Both agents run as **foreground** agents. Wait for both to complete before proceeding to Phase 3.
+
+#### 2.1 Meta-Judge Prompt
+
+The meta-judge generates an evaluation specification (rubrics, checklist, scoring criteria) tailored to this specific task. It will return to you the evaluation specification YAML.
+
+```markdown
+## Task
+
+Generate an evaluation specification yaml for the following task. You will produce rubrics, checklists, and scoring criteria that a judge agent will use to evaluate the implementation artifact.
+
+CLAUDE_PLUGIN_ROOT=`${CLAUDE_PLUGIN_ROOT}`
+
+## User Prompt
+{Original task description from user}
+
+## Context
+{Any relevant codebase context, file paths, constraints}
+
+## Artifact Type
+{code | documentation | configuration | etc.}
+
+## Instructions
+Return only the final evaluation specification YAML in your response.
+```
+
+```
+Use Task tool:
+  - description: "Meta-judge: {brief task summary}"
+  - prompt: {meta-judge prompt}
+  - model: opus
+  - subagent_type: "sadd:meta-judge"
+```
+
+#### 2.2 Implementation Agent Prompt
 
 Construct the implementation prompt with these mandatory components:
 
-#### 2.1 Zero-shot Chain-of-Thought Prefix (REQUIRED - MUST BE FIRST)
+**Zero-shot Chain-of-Thought Prefix (REQUIRED - MUST BE FIRST)**
 
 ```markdown
 ## Reasoning Approach
@@ -116,7 +158,7 @@ Let's approach this step by step:
 Work through each step explicitly before implementing.
 ```
 
-#### 2.2 Task Body
+**Task Body**
 
 ```markdown
 ## Task
@@ -136,7 +178,7 @@ Provide your implementation along with a "Summary" section containing:
 - Potential concerns or follow-up needed
 ```
 
-#### 2.3 Self-Critique Suffix (REQUIRED - MUST BE LAST)
+**Self-Critique Suffix (REQUIRED - MUST BE LAST)**
 
 ```markdown
 ## Self-Critique Verification (MANDATORY)
@@ -167,81 +209,77 @@ If ANY verification question reveals a gap:
 CRITICAL: Do not submit until ALL verification questions have satisfactory answers.
 ```
 
-#### 2.4 Dispatch
+**Dispatch**
+
+Determine the optimal agent type based on the task and avaiable agents, for exmple: code implementation -> `sdd:developer` agent. If you not sure, better use `general-purpose` agent, than dispatch incorrect agent type.
 
 ```
 Use Task tool:
   - description: "Implement: {brief task summary}"
   - prompt: {constructed prompt with CoT + task + self-critique}
   - model: {selected model}
-  - subagent_type: "sdd:developer"
+  - subagent_type: "{selected agent type}"
 ```
+
+#### 2.3 Parallel Dispatch Example
+
+Send BOTH Task tool calls in a single message. Meta-judge first, implementation second:
+
+```
+Message with 2 tool calls:
+  Tool call 1 (meta-judge):
+    - description: "Meta-judge: {brief task summary}"
+    - model: opus
+    - subagent_type: "sadd:meta-judge"
+
+  Tool call 2 (implementation):
+    - description: "Implement: {brief task summary}"
+    - model: {selected model}
+    - subagent_type: "{selected agent type}"
+```
+
+Wait for BOTH to return before proceeding to Phase 3.
 
 ### Phase 3: Dispatch Judge Agent
 
-After implementation completes, dispatch an independent judge.
+After BOTH meta-judge and implementation complete, dispatch the judge agent.
+
+CRITICAL: Provide to the judge EXACT meta-judge's evaluation specification YAML, do not skip or add anything, do not modify it in any way, do not shorten or sumaraize any text in it!
+
+**Extract from meta-judge output:**
+- The final evaluation specification YAML
+
+**Extract from implementation output:**
+- Summary section (files modified, key changes)
+- Paths to files modified
 
 **Judge prompt template:**
 
 ```markdown
-You are verifying completion of a task.
+You are evaluating an implementation artifact against an evaluation specification produced by the meta judge.
 
-## Task Requirements
+CLAUDE_PLUGIN_ROOT=`${CLAUDE_PLUGIN_ROOT}`
+
+## User Prompt
 {Original task description from user}
+
+## Evaluation Specification
+
+```yaml
+{meta-judge's evaluation specification YAML}
+```
 
 ## Implementation Output
 {Summary section from implementation agent}
 {Paths to files modified}
 
-## Evaluation Criteria
-1. **Correctness** (35%) - Does the implementation meet requirements?
-2. **Quality** (25%) - Is the code well-structured and maintainable?
-3. **Completeness** (25%) - Are all required elements present?
-4. **Patterns** (15%) - Does it follow existing codebase conventions?
+## Instructions
+
+Follow your full judge process as defined in your agent instructions!
 
 ## Output
-CRITICAL: You must reply with this exact structured header format:
 
----
-VERDICT: [PASS/FAIL]
-SCORE: [X.X]/5.0
-ISSUES:
-  - {issue_1 or "None"}
-  - {issue_2 or "None"}
-IMPROVEMENTS:
-  - {improvement_1 or "None"}
----
-
-[Detailed evaluation follows]
-
-## Instructions
-1. Read the implementation files
-2. Verify each requirement was met with specific evidence
-3. Identify any gaps, issues, or missing elements
-4. Score each criterion and calculate weighted total
-
-CRITICAL: List specific issues that must be fixed for retry.
-
-## Scoring Scale
-
-**DEFAULT SCORE IS 2. You must justify ANY deviation upward.**
-
-| Score | Meaning | Evidence Required | Your Attitude |
-|-------|---------|-------------------|---------------|
-| 1 | Unacceptable | Clear failures, missing requirements | Easy call |
-| 2 | Below Average | Multiple issues, partially meets requirements | Common result |
-| 3 | Adequate | Meets basic requirements, minor issues | Need proof that it meets basic requirements |
-| 4 | Good | Meets ALL requirements, very few minor issues | Prove it deserves this |
-| 5 | Excellent | Exceeds requirements, genuinely exemplary | **Extremely rare** - requires exceptional evidence |
-
-### Score Distribution Reality Check
-
-- **Score 5**: Should be given in <5% of evaluations. If you're giving more 5s, you're too lenient.
-- **Score 4**: Reserved for genuinely solid work. Not "pretty good" - actually good.
-- **Score 3**: This is where refined work lands. Not average.
-- **Score 2**: Common for first attempts. Don't be afraid to use it.
-- **Score 1**: Reserved for fundamental failures. But don't avoid it when deserved.
-
+CRITICAL: You must reply with this exact structured evaluation report format in YAML at the START of your response!
 ```
 
 CRITICAL: NEVER provide score threshold, in any format, including `threshold_pass` or anything different. Judge MUST not know what thershold for score is, in order to not be biased!!!
@@ -251,9 +289,10 @@ CRITICAL: NEVER provide score threshold, in any format, including `threshold_pas
 ```
 Use Task tool:
   - description: "Judge: {brief task summary}"
-  - prompt: {judge verification prompt}
-  - model: {same as implementation or sonnet}
-  - subagent_type: "general-purpose"
+  - prompt: {judge verification prompt with exact meta-judge specification YAML}
+  - model: opus
+  - subagent_type: "sadd:judge"
+```
 ```
 
 ### Phase 4: Parse Verdict and Iterate
@@ -276,15 +315,20 @@ If score ≥4:
   → Report success with summary
   → Include IMPROVEMENTS as optional enhancements
 
+IF score ≥ 3.0 and all found issues are low priority, then:
+  → VERDICT: PASS
+  → Report success with summary
+  → Include IMPROVEMENTS as optional enhancements
+
 If score <4:
   → VERDICT: FAIL
   → Check retry count
 
-  If retries < 2:
+  If retries < 3:
     → Dispatch retry implementation agent with judge feedback
-    → Return to Phase 3 (judge verification)
+    → Return to Phase 3 (judge verification with same meta-judge specification)
 
-  If retries ≥ 2:
+  If retries ≥ 3:
     → Escalate to user (see Error Handling)
     → Do NOT proceed without user decision
 ```
@@ -410,14 +454,17 @@ Awaiting your decision...
 Phase 1: Task Analysis
   → Model: Opus
 
-Phase 2: Dispatch Implementation
-  Implementation (Opus + sdd:developer)...
+Phase 2: Parallel Dispatch (single message, 2 tool calls)
+  Tool call 1 — Meta-judge (Opus)...
+    → Generated evaluation specification YAML
+    → 3 rubric dimensions, 6 checklist items
+  Tool call 2 — Implementation (sadd:meta-judge + Opus)...
     → Created UserValidator.ts
     → Updated UserController to use validator
     → Summary: 2 files modified, validation extracted
 
-Phase 3: Dispatch Judge
-  Judge Verification (Opus)...
+Phase 3: Dispatch Judge (with meta-judge specification)
+  Judge (sadd:judge)...
     → VERDICT: PASS, SCORE: 4.2/5.0
     → ISSUES: None
     → IMPROVEMENTS: Add input validation for edge cases
@@ -444,13 +491,16 @@ Phase 1: Task Analysis
   - Scope: Medium (single middleware)
   → Model: opus
 
-Phase 2: Dispatch Implementation (Attempt 1)
-  Implementation (Opus + sdd:developer)...
+Phase 2: Parallel Dispatch (Attempt 1)
+  Tool call 1 — Meta-judge (Opus)...
+    → Generated evaluation specification YAML
+    → 4 rubric dimensions, 8 checklist items
+  Tool call 2 — Implementation (sadd:meta-judge + Opus + sdd:developer)...
     → Created RateLimiter middleware
     → Added configuration schema
 
-Phase 3: Dispatch Judge
-  Judge Verification (Opus)...
+Phase 3: Dispatch Judge (with meta-judge specification)
+  Judge (sadd:judge + Opus)...
     → VERDICT: FAIL, SCORE: 3.1/5.0
     → ISSUES:
       - Missing per-endpoint configuration
@@ -458,12 +508,12 @@ Phase 3: Dispatch Judge
     → IMPROVEMENTS: Add monitoring hooks
 
 Phase 5: Retry with Feedback
-  Implementation (Opus + sdd:developer)...
+  Implementation (sadd:meta-judge + Opus)...
     → Added endpoint-specific limits
     → Added Redis adapter option
 
-Phase 3: Dispatch Judge (Attempt 2)
-  Judge Verification (Opus)...
+Phase 3: Dispatch Judge (Attempt 2, same meta-judge specification)
+  Judge (sadd:judge + Opus)...
     → VERDICT: PASS, SCORE: 4.4/5.0
     → IMPROVEMENTS: Add metrics export
 
@@ -487,6 +537,10 @@ Phase 1: Task Analysis
   - Complexity: High
   - Risk: High (database schema change)
   → Model: opus
+
+Phase 2: Parallel Dispatch
+  Meta-judge → evaluation specification YAML
+  Implementation → initial migration scaffolding
 
 Attempt 1: FAIL (2.8/5.0) - Missing tenant isolation in queries
 Attempt 2: FAIL (3.2/5.0) - Incomplete migration script
@@ -514,16 +568,19 @@ Attempt 4 (with guidance): PASS (4.1/5.0)
 - **Match complexity** - Don't use Opus for simple transformations
 - **Consider risk** - Higher risk = stronger model
 
-### Judge Verification
+### Meta-Judge + Judge Verification
 
-- **Never skip** - The judge catches what self-critique misses
-- **Parse only headers** - Don't read full reports to avoid context pollution
+- **Never skip meta-judge** - Tailored evaluation criteria produce better judgments than generic ones
+- **Reuse meta-judge spec on retries** - The evaluation specification stays constant across retry attempts; only the implementation changes
+- **Parse only headers from judge** - Don't read full reports to avoid context pollution
 - **Trust the threshold** - 4/5.0 is the quality gate
+- **Include CLAUDE_PLUGIN_ROOT** - Both meta-judge and judge need the resolved plugin root path
 
 ### Iteration
 
 - **Focus fixes** - Don't rewrite everything, fix specific issues
 - **Pass feedback verbatim** - Let the implementation agent see exact issues
+- **Same meta-judge spec** - Do NOT re-run meta-judge on retries; the evaluation criteria don't change
 - **Escalate appropriately** - Don't loop forever on fundamental problems
 
 ### Context Management
@@ -531,3 +588,4 @@ Attempt 4 (with guidance): PASS (4.1/5.0)
 - **Keep it clean** - You orchestrate, sub-agents implement
 - **Summarize, don't copy** - Pass summaries, not full file contents
 - **Trust sub-agents** - They can read files themselves
+- **Meta-judge YAML** - Pass only the meta-judge YAML to the judge, do not add any additional text or comments to it!
