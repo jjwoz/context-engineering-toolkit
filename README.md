@@ -20,9 +20,6 @@ Hand-crafted collection of advanced context engineering techniques and patterns 
 
 The marketplace is based on prompts used daily by our company developers for a long time, supplemented by plugins from benchmarked papers and high-quality projects.
 
-> [!IMPORTANT]
-> **v2 marketplace release:** [Spec-Driven Development plugin](https://cek.neolab.finance/plugins/sdd) was rewritten from scratch. It is now able to produce working code in 100% of cases on real-life production projects!
-
 ## Key Features
 
 - **Simple to Use** - Easy to install and use without any dependencies. Contains automatically used skills and self-explanatory commands.
@@ -31,6 +28,14 @@ The marketplace is based on prompts used daily by our company developers for a l
 - **Granular** - Install only the plugins you need. Each plugin loads only its specific agents, commands, and skills. Each without overlap and redundant skills.
 - **Scientifically proven** - Plugins are based on proven techniques and patterns that were tested by well-trusted benchmarks and studies.
 - **Open-Standards** - Skills are based on [agentskills.io](https://agentskills.io) specification. The [SDD](https://cek.neolab.finance/plugins/sdd) plugin is based on the **Arc42** specification standard for software development documentation.
+
+## News
+
+Updates from key releases:
+
+- **v2.0.0:** [Spec-Driven Development plugin](https://cek.neolab.finance/plugins/sdd) was rewritten from scratch. It is now able to produce working code in 99% of cases on real-life production projects!
+- **v2.1.0:** [Spec-Driven Development plugin](https://cek.neolab.finance/plugins/sdd) agents include high level code quality guidlines from [DDD plugin](https://cek.neolab.finance/plugins/ddd).
+- **v2.2.0:** [Subagent-Driven Development plugin](https://cek.neolab.finance/plugins/sadd) now works as a distiled version of [SDD plugin](https://cek.neolab.finance/plugins/sdd) using meta-judge and judge sub-agents for specification generation on the fly and in parallel to implementation. [DDD plugin](https://cek.neolab.finance/plugins/ddd) now includes Clean Architecture, DDD, SOLID, Functional Programming, and other patterns examples as rules that automatically added to the context during code writing.
 
 ## Quick Start
 
@@ -106,100 +111,25 @@ In order to use this hook, you need to have `bun` installed. However, it is not 
 
 You can find the complete Context Engineering Kit documentation [here](https://cek.neolab.finance).
 
-However, the main plugin we recommend starting with is [Spec-Driven Development](https://cek.neolab.finance/plugins/sdd).
+However, the main plugins we recommend starting from are [Subagent-Driven Development](https://cek.neolab.finance/plugins/sadd) and [Spec-Driven Development](https://cek.neolab.finance/plugins/sdd).
 
-## [Spec-Driven Development](https://cek.neolab.finance/plugins/sdd)
+### Agent Reliability Engineering
 
-Comprehensive specification-driven development workflow plugin that transforms prompts into production-ready implementations through structured planning, architecture design, and quality-gated execution.
+The 3 plugins in this marketplace are designed to improve how accuratly and consistently agent follows provided instructions and decrease amount of hallucinations and bias toward incorrect solutions. They are not concurrents, rather complimentary to each other, because they allow to balance reliability vs token cost per task complexity. There high level comparision of different agent usage approaches vs probablity to receive results that fully accurate and include 0 halicunations based on task complexity:
 
-This plugin is designed to consistently produce working code. It was tested on real-life production projects by our team, and in 100% of cases, it generated working code aligned with the initial prompt. If you find a use case it cannot handle, please report it as an issue.
+|          | p: probability to recive accurate results for following amount of changed files | | |
+| Approach | 1-3 | 4-10 | 10-20 | 20+ | Tokens Overhead | What does this mean in practice |
+|----------|-----------|------|-------|-----|-----------------|---------------------------------|
+| One-shot prompt | 60%-80% | 30%-50% | 5%-30% | 1%-20% | 0 | Depend on model. With context growth LLM accuracy degrades exponentially |
+| [/reflect](https://cek.neolab.finance/plugins/reflexion/reflect) | 68%-91% | 49%-71% | 13%-41% | 1%-30% | 1k-3k | Agent find and fix missed requirements |
+| [/reflect](https://cek.neolab.finance/plugins/reflexion/reflect) + [/memorize](https://cek.neolab.finance/plugins/reflexion/memorize) | 79%-87% | 60%-79% | 34%-42% | 5%-30% | 2k-5k | Agent extract repetable mistakes and avoid them during new tasks |
+| [/do-and-judge](https://cek.neolab.finance/plugins/sadd/do-and-judge) | 90% | 83% | 60% | 30% | 1.5x-3x | Mitigates context rot, bias, hallcunations, missed requirements using judge sub-agent | 
+| [/do-in-steps](https://cek.neolab.finance/plugins/sadd/do-in-steps) | 92% | 90% | 71% | 50% | 3x-5x | Resolve all issues like /do-and-judge, but separatly per file group |
+| [/plan + /implement](https://cek.neolab.finance/plugins/sdd) | 94% | 93% | 85% | 70% | 5x-20x | Specification mitigate issues caused by inconsistent architecture and codebase |
+| [/brainstorm](https://cek.neolab.finance/plugins/sdd/brainstorm) + [/plan](https://cek.neolab.finance/plugins/sdd/plan) + [/implement](https://cek.neolab.finance/plugins/sdd/implement) | 95% | 95% | 90% | 80% | 5x-20x | Brainstorming decrease amount of incorrect decisions and missed requirements |
+| [/plan](https://cek.neolab.finance/plugins/sdd/plan) + human review + [/implement](https://cek.neolab.finance/plugins/sdd/implement) | 99% | 99% | 99% | 95% | 5x-35x | Human review mitigates misunderstanding of requirements by LLM |
 
-### Key Features
-
-- **Development as compilation** — The plugin works like a "compilation" or "nightly build" for your development process: `task specs → run /sdd:implement → working code`. After writing your prompt, you can launch the plugin and expect a working result when you come back. The time it takes depends on task complexity — simple tasks may finish in 30 minutes, while complex ones can take a few days.
-- **Benchmark-level quality in real life** — Model benchmarks improve with each release, yet real-world results usually stay the same. That's because benchmarks reflect the best possible output a model can achieve, whereas in practice LLMs tend to drift toward sub-optimal solutions that can be wrong or non-functional. This plugin uses a variety of patterns to keep the model working at its peak performance.
-- **Customizable** — Balance result quality and process speed by adjusting command parameters. Learn more in the [Customization](./customization.md) section.
-- **Developer time-efficient** — The overall process is designed to minimize developer time and reduce the number of interactions, while still producing results better than what a model can generate from scratch. However, overall quality is highly proportional to the time you invest in iterating and refining the specification.
-- **Industry-standard** — The plugin's specification template is based on the arc42 standard, adjusted for LLM capabilities. Arc42 is a widely adopted, high-quality standard for software development documentation used by many companies and organizations.
-- **Works best in complex or large codebases** — While most other frameworks work best for new projects and greenfield development, this plugin is designed to perform better the more existing code and well-structured architecture you have. At each planning phase it includes a **codebase impact analysis** step that evaluates which files may be affected and which patterns to follow to achieve the desired result.
-- **Simple** — This plugin avoids unnecessary complexity and mainly uses just 3 commands, offloading process complexity to the model via multi-agent orchestration. `/sdd:implement` is a single command that produces working code from a task specification. To create that specification, you run `/sdd:add-task` and `/sdd:plan`, which analyze your prompt and iteratively refine the specification until it meets the required quality.
-
-### Quick Start
-
-```bash
-/plugin install sdd@NeoLabHQ/context-engineering-kit
-```
-
-Then run the following commands:
-
-```bash
-# create .specs/tasks/draft/design-auth-middleware.feature.md file with initial prompt
-/sdd:add-task "Design and implement authentication middleware with JWT support"
-
-# write detailed specification for the task
-/sdd:plan
-# will move task to .specs/tasks/todo/ folder
-```
-
-Restart the Claude Code session to clear context and start fresh. Then run the following command:
-
-```bash
-# implement the task
-/sdd:implement @.specs/tasks/todo/design-auth-middleware.feature.md
-# produces working implementation and moves the task to .specs/tasks/done/ folder
-```
-
-- [Detailed guide](https://cek.neolab.finance/guides/spec-driven-development)
-- [Usage Examples](https://cek.neolab.finance/plugins/sdd/usage-examples)
-
-**Commands**
-
-- [/sdd:add-task](https://cek.neolab.finance/plugins/sdd/add-task) - Create task template file with initial prompt
-- [/sdd:plan](https://cek.neolab.finance/plugins/sdd/plan) - Analyze prompt, generate required skills and refine task specification
-- [/sdd:implement](https://cek.neolab.finance/plugins/sdd/implement) - Produce a working implementation of the task and verify it
-
-Additional commands useful before creating a task:
-
-- [/sdd:create-ideas](https://cek.neolab.finance/plugins/sdd/create-ideas) - Generate diverse ideas on a given topic using creative sampling techniques
-- [/sdd:brainstorm](https://cek.neolab.finance/plugins/sdd/brainstorm) - Refine vague ideas into fully-formed designs through collaborative dialogue
-
-**Agents**
-
-| Agent | Description | Used By |
-|-------|-------------|---------|
-| `researcher` | Technology research, dependency analysis, best practices | `/sdd:plan` (Phase 2a) |
-| `code-explorer` | Codebase analysis, pattern identification, architecture mapping | `/sdd:plan` (Phase 2b) |
-| `business-analyst` | Requirements discovery, stakeholder analysis, specification writing | `/sdd:plan` (Phase 2c) |
-| `software-architect` | Architecture design, component design, implementation planning | `/sdd:plan` (Phase 3) |
-| `tech-lead` | Task decomposition, dependency mapping, risk analysis | `/sdd:plan` (Phase 4) |
-| `team-lead` | Step parallelization, agent assignment, execution planning | `/sdd:plan` (Phase 5) |
-| `qa-engineer` | Verification rubrics, quality gates, LLM-as-Judge definitions | `/sdd:plan` (Phase 6) |
-| `developer` | Code implementation, TDD execution, quality review, verification | `/sdd:implement` |
-| `tech-writer` | Technical documentation writing, API guides, architecture updates, lessons learned | `/sdd:implement` |
-
-
-### Patterns
-
-Key patterns implemented in this plugin:
-
-- **Structured reasoning templates** — includes Zero-shot and Few-shot Chain of Thought, Tree of Thoughts, Problem Decomposition, and Self-Critique. Each is tailored to a specific agent and task, enabling sufficiently detailed decomposition so that isolated sub-agents can implement each step independently.
-- **Multi-agent orchestration for context management** — Context isolation of independent agents prevents the context rot problem, essentially keeping LLMs at optimal performance at each step of the process. The main agent acts as an orchestrator that launches sub-agents and controls their work.
-- **Quality gates based on LLM-as-Judge** — Evaluate the quality of each planning and implementation step using evidence-based scoring and predefined verification rubrics. This fully eliminates cases where an agent produces non-working or incorrect solutions.
-- **Continuous learning** — Builds skills that the agent needs to implement a specific task, which it would otherwise not be able to perform from scratch.
-- **Spec-driven development pattern** — Based on the arc42 specification standard, adjusted for LLM capabilities, to eliminate parts of the specification that add no value to implementation quality or that could degrade it.
-- **MAKER** — An agent reliability pattern introduced in [Solving a Million-Step LLM Task with Zero Errors](https://arxiv.org/abs/2511.09030). It removes agent mistakes caused by accumulated context and hallucinations by utilizing clean-state agent launches, filesystem-based memory storage, and multi-agent voting during critical decision-making.
-
-### Vibe Coding vs. Specification-Driven Development
-
-This plugin is not a "vibe coding" solution, but out of the box it works like one. By default it is designed to work from a single prompt through to the end of the task, making reasonable assumptions and evidence-based decisions instead of constantly asking for clarification. This is because developer time is more valuable than model time, allowing the developer to decide how much time the task is worth. The plugin will always produce working results, but quality will be sub-optimal if no human feedback is provided.
-
-To improve quality, after generating a specification you can correct it or leave comments using `//`, then run the `/plan` command again with the `--refine` flag. You can also verify each planning and implementation phase by adding the `--human-in-the-loop` flag. According to most known research, human feedback is the most effective way to improve results.
-
-Our tests showed that even when the initially generated specification was incorrect due to lack of information or task complexity, the agent was still able to self-correct until it reached a working solution. However, it usually took much longer, spending time on wrong paths and stopping more frequently. To avoid this, we strongly advise decomposing tasks into smaller separate tasks with dependencies and reviewing the specification for each one. You can add dependencies between tasks as arguments to the `/add-task` command, and the model will link them together by adding a `depends_on` section to the task file frontmatter.
-
-Even if you don't want to spend much time on this process, you can still use the plugin for complex tasks without decomposition or human verification — but you will likely need tools like ralph-loop to keep the agent running for longer.
-
-Learn more about available customization options in [Customization](https://cek.neolab.finance/plugins/sdd/customization).
+> Relaibility metrics are based on real development usage on production projects for more than 6 months.
 
 ## Plugins List
 
@@ -242,6 +172,14 @@ Collection of commands that force the LLM to reflect on previous response and ou
 **Hooks**
 
 - **Automatic Reflection Hook** - Triggers `/reflexion:reflect` automatically when "reflect" appears in your prompt
+
+**Theoretical Foundation**
+
+Plugin is based on papers like [Self-Refine](https://arxiv.org/abs/2303.17651) and [Reflexion](https://arxiv.org/abs/2303.11366). These techniques improve the output of large language models by introducing feedback and refinement loops.
+
+They are proven to **increase output quality by 8–21%** based on both automatic metrics and human preferences across seven diverse tasks, including dialogue generation, coding, and mathematical reasoning, when compared to standard one-step model outputs.
+
+On top of that, the plugin is based on the [Agentic Context Engineering](https://arxiv.org/abs/2510.04618) paper that uses memory updates after reflection, and **consistently outperforms strong baselines by 10.6%** on agents.
 
 ### [Code Review](https://cek.neolab.finance/plugins/code-review)
 
@@ -340,6 +278,100 @@ Execution framework for competitive generation, multi-agent evaluation, and suba
 
 - [subagent-driven-development](https://cek.neolab.finance/plugins/sadd/subagent-driven-development) - Dispatches fresh subagent for each task with code review between tasks, enabling fast iteration with quality gates
 - [multi-agent-patterns](https://cek.neolab.finance/plugins/sadd/multi-agent-patterns) - Design multi-agent architectures (supervisor, peer-to-peer, hierarchical) for complex tasks exceeding single-agent context limits
+
+### [Spec-Driven Development](https://cek.neolab.finance/plugins/sdd)
+
+Comprehensive specification-driven development workflow plugin that transforms prompts into production-ready implementations through structured planning, architecture design, and quality-gated execution.
+
+This plugin is designed to consistently produce working code. It was tested on real-life production projects by our team, and in 100% of cases, it generated working code aligned with the initial prompt. If you find a use case it cannot handle, please report it as an issue.
+
+#### Key Features
+
+- **Development as compilation** — The plugin works like a "compilation" or "nightly build" for your development process: `task specs → run /sdd:implement → working code`. After writing your prompt, you can launch the plugin and expect a working result when you come back. The time it takes depends on task complexity — simple tasks may finish in 30 minutes, while complex ones can take a few days.
+- **Benchmark-level quality in real life** — Model benchmarks improve with each release, yet real-world results usually stay the same. That's because benchmarks reflect the best possible output a model can achieve, whereas in practice LLMs tend to drift toward sub-optimal solutions that can be wrong or non-functional. This plugin uses a variety of patterns to keep the model working at its peak performance.
+- **Customizable** — Balance result quality and process speed by adjusting command parameters. Learn more in the [Customization](./customization.md) section.
+- **Developer time-efficient** — The overall process is designed to minimize developer time and reduce the number of interactions, while still producing results better than what a model can generate from scratch. However, overall quality is highly proportional to the time you invest in iterating and refining the specification.
+- **Industry-standard** — The plugin's specification template is based on the arc42 standard, adjusted for LLM capabilities. Arc42 is a widely adopted, high-quality standard for software development documentation used by many companies and organizations.
+- **Works best in complex or large codebases** — While most other frameworks work best for new projects and greenfield development, this plugin is designed to perform better the more existing code and well-structured architecture you have. At each planning phase it includes a **codebase impact analysis** step that evaluates which files may be affected and which patterns to follow to achieve the desired result.
+- **Simple** — This plugin avoids unnecessary complexity and mainly uses just 3 commands, offloading process complexity to the model via multi-agent orchestration. `/sdd:implement` is a single command that produces working code from a task specification. To create that specification, you run `/sdd:add-task` and `/sdd:plan`, which analyze your prompt and iteratively refine the specification until it meets the required quality.
+
+#### Quick Start
+
+```bash
+/plugin install sdd@NeoLabHQ/context-engineering-kit
+```
+
+Then run the following commands:
+
+```bash
+# create .specs/tasks/draft/design-auth-middleware.feature.md file with initial prompt
+/sdd:add-task "Design and implement authentication middleware with JWT support"
+
+# write detailed specification for the task
+/sdd:plan
+# will move task to .specs/tasks/todo/ folder
+```
+
+Restart the Claude Code session to clear context and start fresh. Then run the following command:
+
+```bash
+# implement the task
+/sdd:implement @.specs/tasks/todo/design-auth-middleware.feature.md
+# produces working implementation and moves the task to .specs/tasks/done/ folder
+```
+
+- [Detailed guide](https://cek.neolab.finance/guides/spec-driven-development)
+- [Usage Examples](https://cek.neolab.finance/plugins/sdd/usage-examples)
+
+**Commands**
+
+- [/sdd:add-task](https://cek.neolab.finance/plugins/sdd/add-task) - Create task template file with initial prompt
+- [/sdd:plan](https://cek.neolab.finance/plugins/sdd/plan) - Analyze prompt, generate required skills and refine task specification
+- [/sdd:implement](https://cek.neolab.finance/plugins/sdd/implement) - Produce a working implementation of the task and verify it
+
+Additional commands useful before creating a task:
+
+- [/sdd:create-ideas](https://cek.neolab.finance/plugins/sdd/create-ideas) - Generate diverse ideas on a given topic using creative sampling techniques
+- [/sdd:brainstorm](https://cek.neolab.finance/plugins/sdd/brainstorm) - Refine vague ideas into fully-formed designs through collaborative dialogue
+
+**Agents**
+
+| Agent | Description | Used By |
+|-------|-------------|---------|
+| `researcher` | Technology research, dependency analysis, best practices | `/sdd:plan` (Phase 2a) |
+| `code-explorer` | Codebase analysis, pattern identification, architecture mapping | `/sdd:plan` (Phase 2b) |
+| `business-analyst` | Requirements discovery, stakeholder analysis, specification writing | `/sdd:plan` (Phase 2c) |
+| `software-architect` | Architecture design, component design, implementation planning | `/sdd:plan` (Phase 3) |
+| `tech-lead` | Task decomposition, dependency mapping, risk analysis | `/sdd:plan` (Phase 4) |
+| `team-lead` | Step parallelization, agent assignment, execution planning | `/sdd:plan` (Phase 5) |
+| `qa-engineer` | Verification rubrics, quality gates, LLM-as-Judge definitions | `/sdd:plan` (Phase 6) |
+| `developer` | Code implementation, TDD execution, quality review, verification | `/sdd:implement` |
+| `tech-writer` | Technical documentation writing, API guides, architecture updates, lessons learned | `/sdd:implement` |
+
+
+#### Patterns
+
+Key patterns implemented in this plugin:
+
+- **Structured reasoning templates** — includes Zero-shot and Few-shot Chain of Thought, Tree of Thoughts, Problem Decomposition, and Self-Critique. Each is tailored to a specific agent and task, enabling sufficiently detailed decomposition so that isolated sub-agents can implement each step independently.
+- **Multi-agent orchestration for context management** — Context isolation of independent agents prevents the context rot problem, essentially keeping LLMs at optimal performance at each step of the process. The main agent acts as an orchestrator that launches sub-agents and controls their work.
+- **Quality gates based on LLM-as-Judge** — Evaluate the quality of each planning and implementation step using evidence-based scoring and predefined verification rubrics. This fully eliminates cases where an agent produces non-working or incorrect solutions.
+- **Continuous learning** — Builds skills that the agent needs to implement a specific task, which it would otherwise not be able to perform from scratch.
+- **Spec-driven development pattern** — Based on the arc42 specification standard, adjusted for LLM capabilities, to eliminate parts of the specification that add no value to implementation quality or that could degrade it.
+- **MAKER** — An agent reliability pattern introduced in [Solving a Million-Step LLM Task with Zero Errors](https://arxiv.org/abs/2511.09030). It removes agent mistakes caused by accumulated context and hallucinations by utilizing clean-state agent launches, filesystem-based memory storage, and multi-agent voting during critical decision-making.
+
+#### Vibe Coding vs. Specification-Driven Development
+
+This plugin is not a "vibe coding" solution, but out of the box it works like one. By default it is designed to work from a single prompt through to the end of the task, making reasonable assumptions and evidence-based decisions instead of constantly asking for clarification. This is because developer time is more valuable than model time, allowing the developer to decide how much time the task is worth. The plugin will always produce working results, but quality will be sub-optimal if no human feedback is provided.
+
+To improve quality, after generating a specification you can correct it or leave comments using `//`, then run the `/plan` command again with the `--refine` flag. You can also verify each planning and implementation phase by adding the `--human-in-the-loop` flag. According to most known research, human feedback is the most effective way to improve results.
+
+Our tests showed that even when the initially generated specification was incorrect due to lack of information or task complexity, the agent was still able to self-correct until it reached a working solution. However, it usually took much longer, spending time on wrong paths and stopping more frequently. To avoid this, we strongly advise decomposing tasks into smaller separate tasks with dependencies and reviewing the specification for each one. You can add dependencies between tasks as arguments to the `/add-task` command, and the model will link them together by adding a `depends_on` section to the task file frontmatter.
+
+Even if you don't want to spend much time on this process, you can still use the plugin for complex tasks without decomposition or human verification — but you will likely need tools like ralph-loop to keep the agent running for longer.
+
+Learn more about available customization options in [Customization](https://cek.neolab.finance/plugins/sdd/customization).
+
 
 ### [Domain-Driven Development](https://cek.neolab.finance/plugins/ddd)
 
