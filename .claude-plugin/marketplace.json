@@ -151,5 +151,18 @@
       "source": "./plugins/fpf",
       "category": "development"
     }
+  ],
+  "custom_plugins": [
+    {
+      "name": "mailchimp",
+      "description": "PR velocity and gamified PR splitting skills. Includes pr-pace (rolling 7-day velocity nudges), work-on (Jira ticket context with branch management), and gamify (intelligent PR decomposition using SDD agents and reflexion judges).",
+      "version": "1.0.0",
+      "author": {
+        "name": "John Wozniak",
+        "email": "john_wozniak@intuit.com"
+      },
+      "source": "./plugins/mailchimp",
+      "category": "productivity"
+    }
   ]
 }

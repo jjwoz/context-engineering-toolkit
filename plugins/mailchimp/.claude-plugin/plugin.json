@@ -1,0 +1,9 @@
+{
+  "name": "mailchimp",
+  "version": "1.0.0",
+  "description": "PR velocity and gamified PR splitting skills. Includes pr-pace (rolling 7-day velocity nudges injected into work-on and pr-create-from-commits), work-on (Jira ticket context with branch management and pace awareness), and gamify (intelligent PR decomposition using SDD agents and reflexion judges — splits any PR or branch into reviewable chained PRs with Jira sub-tickets).",
+  "author": {
+    "name": "John Wozniak",
+    "email": "john_wozniak@intuit.com"
+  }
+}
