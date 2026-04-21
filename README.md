@@ -37,6 +37,53 @@ Updates from key releases:
 - **v2.1.0:** [Spec-Driven Development plugin](https://cek.neolab.finance/plugins/sdd) agents include high-level code quality guidelines from [DDD plugin](https://cek.neolab.finance/plugins/ddd).
 - **v2.2.0:** [Subagent-Driven Development plugin](https://cek.neolab.finance/plugins/sadd) now works as a distilled version of [SDD plugin](https://cek.neolab.finance/plugins/sdd) using meta-judge and judge sub-agents for specification generation on the fly and in parallel to implementation. [DDD plugin](https://cek.neolab.finance/plugins/ddd) now includes Clean Architecture, DDD, SOLID, Functional Programming, and other pattern examples as rules that are automatically added to the context during code writing.
 
+## Maintaining Your Fork
+
+This repo is a personal fork of [NeoLabHQ/context-engineering-kit](https://github.com/NeoLabHQ/context-engineering-kit). Use the steps below to stay in sync with upstream and keep your Claude Code plugins up to date.
+
+### One-time setup (after cloning)
+
+```bash
+git clone https://github.com/jjwoz/context-engineering-toolkit
+cd context-engineering-toolkit
+git remote add upstream https://github.com/NeoLabHQ/context-engineering-kit
+```
+
+### Sync with upstream (run when NeoLab ships updates)
+
+```bash
+git fetch upstream
+git checkout main
+git merge upstream/main
+git push origin main
+```
+
+### Re-point Claude Code at this fork (one-time, per machine)
+
+```bash
+claude plugin marketplace remove context-engineering-kit
+claude plugin marketplace add github.com/jjwoz/context-engineering-toolkit
+claude plugin marketplace update
+```
+
+### Update installed plugins after syncing
+
+```bash
+claude plugin update sdd
+claude plugin update reflexion
+claude plugin update tdd
+claude plugin update sadd
+claude plugin update code-review
+```
+
+### Install the mailchimp plugin (once added to this repo)
+
+```bash
+claude plugin install mailchimp@jjwoz/context-engineering-toolkit
+```
+
+---
+
 ## Quick Start
 
 ### Step 1: Install Marketplace and Plugins
