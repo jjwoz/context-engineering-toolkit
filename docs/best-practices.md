@@ -6,13 +6,13 @@
 
 ```bash
 # ❌ Don't install all plugins
-/plugin install reflexion@NeoLabHQ/context-engineering-kit
-/plugin install code-review@NeoLabHQ/context-engineering-kit
-/plugin install sdd@NeoLabHQ/context-engineering-kit
+/plugin install reflexion@jjwoz/context-engineering-toolkit
+/plugin install code-review@jjwoz/context-engineering-toolkit
+/plugin install sdd@jjwoz/context-engineering-toolkit
 # ... (if you won't use them all)
 
 # ✅ Install only plugins that you expect to use
-/plugin install reflexion@NeoLabHQ/context-engineering-kit  # For today's feature work
+/plugin install reflexion@jjwoz/context-engineering-toolkit  # For today's feature work
 ```
 
 ## Maximizing Quality

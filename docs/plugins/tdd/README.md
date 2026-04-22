@@ -26,7 +26,7 @@ The plugin is based on foundational works including Kent Beck's *Test-Driven Dev
 
 ```bash
 # Install the plugin
-/plugin install tdd@NeoLabHQ/context-engineering-kit
+/plugin install tdd@jjwoz/context-engineering-toolkit
 
 > claude "Use TDD skill to implement email validation for user registration"
 

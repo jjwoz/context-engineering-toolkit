@@ -28,10 +28,10 @@ All plugins follow the same installation pattern:
 
 ```bash
 # Add the marketplace (one-time setup)
-/plugin marketplace add NeoLabHQ/context-engineering-kit
+/plugin marketplace add jjwoz/context-engineering-toolkit
 
 # Install a specific plugin
-/plugin install <plugin-name>@NeoLabHQ/context-engineering-kit
+/plugin install <plugin-name>@jjwoz/context-engineering-toolkit
 ```
 
 See individual plugin documentation for specific installation commands and verification steps.

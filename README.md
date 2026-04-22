@@ -39,14 +39,14 @@ Updates from key releases:
 
 ## Maintaining Your Fork
 
-This repo is a personal fork of [NeoLabHQ/context-engineering-kit](https://github.com/NeoLabHQ/context-engineering-kit). Use the steps below to stay in sync with upstream and keep your Claude Code plugins up to date.
+This repo is a personal fork of [jjwoz/context-engineering-toolkit](https://github.com/jjwoz/context-engineering-toolkit). Use the steps below to stay in sync with upstream and keep your Claude Code plugins up to date.
 
 ### One-time setup (after cloning)
 
 ```bash
 git clone https://github.com/jjwoz/context-engineering-toolkit
 cd context-engineering-toolkit
-git remote add upstream https://github.com/NeoLabHQ/context-engineering-kit
+git remote add upstream https://github.com/jjwoz/context-engineering-toolkit
 ```
 
 ### Sync with upstream (run when NeoLab ships updates)
@@ -93,7 +93,7 @@ claude plugin install mailchimp@jjwoz/context-engineering-toolkit
 Open Claude Code and add the Context Engineering Kit marketplace
 
 ```bash
-/plugin marketplace add NeoLabHQ/context-engineering-kit
+/plugin marketplace add jjwoz/context-engineering-toolkit
 ```
 
 This makes all plugins available for installation, but does not load any agents or skills into your context.
@@ -101,7 +101,7 @@ This makes all plugins available for installation, but does not load any agents 
 Install any plugin, for example reflexion:
 
 ```bash
-/plugin install reflexion@NeoLabHQ/context-engineering-kit
+/plugin install reflexion@jjwoz/context-engineering-toolkit
 ```
 
 Each installed plugin loads only its specific agents, commands, and skills into Claude's context.
@@ -111,7 +111,7 @@ Each installed plugin loads only its specific agents, commands, and skills into 
 Run the [vercel-labs/skills](https://github.com/vercel-labs/skills) command in your terminal:
 
 ```bash
-npx skills add NeoLabHQ/context-engineering-kit
+npx skills add jjwoz/context-engineering-toolkit
 ```
 You can pick which skills and agents to install.
 
@@ -121,7 +121,7 @@ You can pick which skills and agents to install.
 You can use [OpenSkills](https://github.com/numman-ali/openskills) to install skills by running the following commands:
 
 ```bash
-npx openskills install NeoLabHQ/context-engineering-kit
+npx openskills install jjwoz/context-engineering-toolkit
 npx openskills sync
 ```
 
@@ -286,7 +286,7 @@ Collection of commands that force the LLM to reflect on the previous response an
 **How to install**
 
 ```bash
-/plugin install reflexion@NeoLabHQ/context-engineering-kit
+/plugin install reflexion@jjwoz/context-engineering-toolkit
 ```
 
 **Commands**
@@ -314,7 +314,7 @@ Comprehensive code review commands using multiple specialized agents for thoroug
 **How to install**
 
 ```bash
-/plugin install code-review@NeoLabHQ/context-engineering-kit
+/plugin install code-review@jjwoz/context-engineering-toolkit
 ```
 
 **Commands**
@@ -342,7 +342,7 @@ Commands and skills for streamlined Git operations including commits, pull reque
 **How to install**
 
 ```bash
-/plugin install git@NeoLabHQ/context-engineering-kit
+/plugin install git@jjwoz/context-engineering-toolkit
 ```
 
 **Commands**
@@ -367,7 +367,7 @@ Commands and skills for test-driven development with anti-pattern detection.
 **How to install**
 
 ```bash
-/plugin install tdd@NeoLabHQ/context-engineering-kit
+/plugin install tdd@jjwoz/context-engineering-toolkit
 ```
 
 **Commands**
@@ -386,7 +386,7 @@ Execution framework for competitive generation, multi-agent evaluation, and suba
 **How to install**
 
 ```bash
-/plugin install sadd@NeoLabHQ/context-engineering-kit
+/plugin install sadd@jjwoz/context-engineering-toolkit
 ```
 
 **Commands**
@@ -424,7 +424,7 @@ This plugin is designed to consistently produce working code. It was tested on r
 #### Quick Start
 
 ```bash
-/plugin install sdd@NeoLabHQ/context-engineering-kit
+/plugin install sdd@jjwoz/context-engineering-toolkit
 ```
 
 Then run the following commands:
@@ -506,7 +506,7 @@ Commands for setting up domain-driven development best practices focused on code
 **How to install**
 
 ```bash
-/plugin install ddd@NeoLabHQ/context-engineering-kit
+/plugin install ddd@jjwoz/context-engineering-toolkit
 ```
 
 **Commands**
@@ -541,7 +541,7 @@ Then, audit for bias, decide, and document the rationale in a durable record.
 **How to install**
 
 ```bash
-/plugin install fpf@NeoLabHQ/context-engineering-kit
+/plugin install fpf@jjwoz/context-engineering-toolkit
 ```
 
 #### Usage workflow
@@ -580,7 +580,7 @@ Continuous improvement methodology inspired by Japanese philosophy and Agile pra
 **How to install**
 
 ```bash
-/plugin install kaizen@NeoLabHQ/context-engineering-kit
+/plugin install kaizen@jjwoz/context-engineering-toolkit
 ```
 
 **Commands**
@@ -603,7 +603,7 @@ Commands and skills for creating and refining Claude Code extensions.
 **How to install**
 
 ```bash
-/plugin install customaize-agent@NeoLabHQ/context-engineering-kit
+/plugin install customaize-agent@jjwoz/context-engineering-toolkit
 ```
 
 **Commands**
@@ -630,7 +630,7 @@ Commands for project analysis and documentation management based on proven writi
 **How to install**
 
 ```bash
-/plugin install docs@NeoLabHQ/context-engineering-kit
+/plugin install docs@jjwoz/context-engineering-toolkit
 ```
 
 **Commands**
@@ -645,7 +645,7 @@ Commands for setting up language and framework-specific best practices.
 **How to install**
 
 ```bash
-/plugin install tech-stack@NeoLabHQ/context-engineering-kit
+/plugin install tech-stack@jjwoz/context-engineering-toolkit
 ```
 
 **Commands**
@@ -663,7 +663,7 @@ Commands for integrating Model Context Protocol servers with your project. Each 
 **How to install**
 
 ```bash
-/plugin install mcp@NeoLabHQ/context-engineering-kit
+/plugin install mcp@jjwoz/context-engineering-toolkit
 ```
 
 **Commands**

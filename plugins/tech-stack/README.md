@@ -17,7 +17,7 @@ When Claude operates with explicit coding standards in CLAUDE.md, it produces mo
 
 ```bash
 # Install the plugin
-/plugin install tech-stack@NeoLabHQ/context-engineering-kit
+/plugin install tech-stack@jjwoz/context-engineering-toolkit
 
 # Add TypeScript best practices to your project
 /tech-stack:add-typescript-best-practices

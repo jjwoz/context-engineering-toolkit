@@ -28,7 +28,7 @@ claude
 Then add the Context Engineering Kit marketplace to make all plugins available:
 
 ```bash
-/plugin marketplace add NeoLabHQ/context-engineering-kit
+/plugin marketplace add jjwoz/context-engineering-toolkit
 ```
 
 **What happens:**
@@ -51,7 +51,7 @@ You should see a list of available plugins from the marketplace, including refle
 We recommend starting with the **Reflexion plugin** - it introduces feedback and refinement loops commands.
 
 ```bash
-/plugin install reflexion@NeoLabHQ/context-engineering-kit
+/plugin install reflexion@jjwoz/context-engineering-toolkit
 ```
 
 **What happens:**
@@ -111,12 +111,12 @@ Install a specific plugin from the marketplace:
 
 ```bash
 # Syntax
-/plugin install <plugin-name>@NeoLabHQ/context-engineering-kit
+/plugin install <plugin-name>@jjwoz/context-engineering-toolkit
 
 # Examples
-/plugin install reflexion@NeoLabHQ/context-engineering-kit
-/plugin install code-review@NeoLabHQ/context-engineering-kit
-/plugin install sdd@NeoLabHQ/context-engineering-kit
+/plugin install reflexion@jjwoz/context-engineering-toolkit
+/plugin install code-review@jjwoz/context-engineering-toolkit
+/plugin install sdd@jjwoz/context-engineering-toolkit
 ```
 
 ### Learn More About Available Plugins
@@ -145,7 +145,7 @@ Welcome to better AI-assisted development with Context Engineering Kit!
 Periodically refresh the marketplace to get the latest plugins and updates:
 
 ```bash
-/plugin marketplace update NeoLabHQ/context-engineering-kit
+/plugin marketplace update jjwoz/context-engineering-toolkit
 ```
 
 ### Removing Plugins

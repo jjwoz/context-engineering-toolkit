@@ -19,7 +19,7 @@ Most commands require GitHub CLI (`gh`) for full functionality including creatin
 
 ```bash
 # Install the plugin
-/plugin install git@NeoLabHQ/context-engineering-kit
+/plugin install git@jjwoz/context-engineering-toolkit
 
 # Create a well-formatted commit
 > /git:commit

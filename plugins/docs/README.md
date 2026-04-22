@@ -31,7 +31,7 @@ The plugin guides you through:
 
 ```bash
 # Install the plugin
-/plugin install docs@NeoLabHQ/context-engineering-kit
+/plugin install docs@jjwoz/context-engineering-toolkit
 
 # Update project documentation after implementing features
 > claude "implement user profile settings page"

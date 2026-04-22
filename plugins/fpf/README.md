@@ -38,7 +38,7 @@ Implementation based on [quint-code](https://github.com/m0n0x41d/quint-code) by 
 
 ```bash
 # Install the plugin
-/plugin install fpf@NeoLabHQ/context-engineering-kit
+/plugin install fpf@jjwoz/context-engineering-toolkit
 
 # Start a decision process
 /fpf:propose-hypotheses What caching strategy should we use?

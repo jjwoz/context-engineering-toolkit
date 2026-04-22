@@ -21,7 +21,7 @@ They are based on the idea that most bugs and quality issues are symptoms of dee
 
 ```bash
 # Install the plugin
-/plugin install kaizen@NeoLabHQ/context-engineering-kit
+/plugin install kaizen@jjwoz/context-engineering-toolkit
 
 # Investigate a bug's root cause
 > /kaizen:why "API returns 500 error on checkout"

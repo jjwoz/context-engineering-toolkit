@@ -2,16 +2,16 @@
 # Context Engineering Kit - Commands Installer
 # 
 # Install for Cursor (default, project-level):
-#   curl -fsSL https://raw.githubusercontent.com/NeoLabHQ/context-engineering-kit/main/.bin/install-commands.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/jjwoz/context-engineering-toolkit/main/.bin/install-commands.sh | bash
 #
 # Install for Cursor globally (user-level):
-#   curl -fsSL https://raw.githubusercontent.com/NeoLabHQ/context-engineering-kit/main/.bin/install-commands.sh | bash -s -- --global
+#   curl -fsSL https://raw.githubusercontent.com/jjwoz/context-engineering-toolkit/main/.bin/install-commands.sh | bash -s -- --global
 #
 # Install for OpenCode:
-#   curl -fsSL https://raw.githubusercontent.com/NeoLabHQ/context-engineering-kit/main/.bin/install-commands.sh | bash -s -- --agent opencode
+#   curl -fsSL https://raw.githubusercontent.com/jjwoz/context-engineering-toolkit/main/.bin/install-commands.sh | bash -s -- --agent opencode
 #
 # Install for OpenCode globally:
-#   curl -fsSL https://raw.githubusercontent.com/NeoLabHQ/context-engineering-kit/main/.bin/install-commands.sh | bash -s -- --agent opencode --global
+#   curl -fsSL https://raw.githubusercontent.com/jjwoz/context-engineering-toolkit/main/.bin/install-commands.sh | bash -s -- --agent opencode --global
 #
 # This script downloads all plugin commands from the Context Engineering Kit
 # and installs them to the appropriate commands directory.
@@ -19,7 +19,7 @@
 set -euo pipefail
 
 # Configuration
-REPO_OWNER="NeoLabHQ"
+REPO_OWNER="jjwoz"
 REPO_NAME="context-engineering-kit"
 BRANCH="master"
 BASE_URL="https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/refs/heads/${BRANCH}"

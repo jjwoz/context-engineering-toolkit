@@ -21,7 +21,7 @@ These principles address the core challenge of software development: **managing 
 
 ```bash
 # Install the plugin
-/plugin install ddd@NeoLabHQ/context-engineering-kit
+/plugin install ddd@jjwoz/context-engineering-toolkit
 
 # Set up code formatting standards in CLAUDE.md
 /ddd:setup-code-formating

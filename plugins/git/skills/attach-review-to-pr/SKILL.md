@@ -363,7 +363,7 @@ Use the review endpoint to group related comments:
 
 ```bash
 #!/bin/bash
-OWNER="NeoLabHQ"
+OWNER="jjwoz"
 REPO="learning-platform-app"
 PR=4
 
@@ -383,7 +383,7 @@ gh api repos/$OWNER/$REPO/pulls/$PR/comments \
 
 ```bash
 #!/bin/bash
-OWNER="NeoLabHQ"
+OWNER="jjwoz"
 REPO="learning-platform-app"
 PR=4
 

@@ -32,7 +32,7 @@ Open Claude Code in your project directory and run the following commands to set
 
 ```bash
 # Install the plugin
-/plugin install mcp@NeoLabHQ/context-engineering-kit
+/plugin install mcp@jjwoz/context-engineering-toolkit
 
 # Set up documentation access for your project
 > /mcp:setup-context7-mcp react, typescript, prisma

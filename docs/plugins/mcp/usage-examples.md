@@ -13,7 +13,7 @@ Real-world scenarios demonstrating effective use of the MCP plugin for documenta
 > npx create-next-app@latest my-app
 
 # Install the MCP plugin
-> /plugin install mcp@NeoLabHQ/context-engineering-kit
+> /plugin install mcp@jjwoz/context-engineering-toolkit
 
 # Configure documentation access
 > /mcp:setup-context7-mcp nextjs 14, prisma, typescript, zod

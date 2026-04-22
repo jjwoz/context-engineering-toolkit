@@ -34,7 +34,7 @@ The plugin supports multiple execution strategies based on task characteristics,
 
 ```bash
 # Install the plugin
-/plugin install sadd@NeoLabHQ/context-engineering-kit
+/plugin install sadd@jjwoz/context-engineering-toolkit
 
 # Use competitive execution for high-stakes tasks
 /do-competitively "Design and implement authentication middleware with JWT support"

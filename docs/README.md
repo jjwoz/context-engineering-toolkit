@@ -48,4 +48,4 @@ Browse our specialized plugins organized by area of focus:
 
 ## Contributing
 
-We welcome contributions! See our [Contributing Guide](https://github.com/NeoLabHQ/context-engineering-kit/blob/main/CONTRIBUTING.md) for details.
+We welcome contributions! See our [Contributing Guide](https://github.com/jjwoz/context-engineering-toolkit/blob/main/CONTRIBUTING.md) for details.

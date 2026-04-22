@@ -4,7 +4,7 @@
   "version": "2.2.3",
   "description": "Hand-crafted collection of advanced context engineering techniques and patterns with minimal token footprint focused on improving agent result quality.",
   "owner": {
-    "name": "NeoLabHQ",
+    "name": "jjwoz",
     "email": "jwozniak.dev@gmail.com"
   },
   "plugins": [

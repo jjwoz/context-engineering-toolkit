@@ -25,7 +25,7 @@ The plugin is built on Anthropic's official skill authoring best practices and r
 
 ```bash
 # Install the plugin
-/plugin install customaize-agent@NeoLabHQ/context-engineering-kit
+/plugin install customaize-agent@jjwoz/context-engineering-toolkit
 
 # Create a new agent
 > /customaize-agent:create-agent code-reviewer "Review code for quality"

@@ -29,7 +29,7 @@ On top of that, the plugin is based on the [Agentic Context Engineering](https:/
 
 ```bash
 # Install the plugin
-/plugin install reflexion@NeoLabHQ/context-engineering-kit
+/plugin install reflexion@jjwoz/context-engineering-toolkit
 ```
 
 ```bash

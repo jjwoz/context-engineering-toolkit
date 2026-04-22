@@ -21,7 +21,7 @@ These principles address the core challenge of software development: **managing 
 
 ```bash
 # Install the plugin
-/plugin install ddd@NeoLabHQ/context-engineering-kit
+/plugin install ddd@jjwoz/context-engineering-toolkit
 
 # Rules activate automatically when writing or reviewing code
 # Alternatively, you can ask Claude to use DDD directly

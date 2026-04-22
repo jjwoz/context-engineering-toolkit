@@ -79,7 +79,7 @@ retry claude plugin install typescript-lsp@claude-plugins-official
 
 # echo "🔧 Installing context-engineering-kit plugins..."
 
-retry claude plugin marketplace add NeoLabHQ/context-engineering-kit
+retry claude plugin marketplace add jjwoz/context-engineering-toolkit
 retry claude plugin install sdd@context-engineering-kit
 retry claude plugin install sadd@context-engineering-kit
 retry claude plugin install git@context-engineering-kit

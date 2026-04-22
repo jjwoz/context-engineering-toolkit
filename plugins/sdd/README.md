@@ -17,7 +17,7 @@ This plugin is designed to consistently and reproducibly produce working code. I
 ## Quick Start
 
 ```bash
-/plugin marketplace add NeoLabHQ/context-engineering-kit
+/plugin marketplace add jjwoz/context-engineering-toolkit
 ```
 
 Enable the `sdd` plugin in the installed plugins list:
