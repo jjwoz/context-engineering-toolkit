@@ -3,7 +3,7 @@
   "version": "1.4.0",
   "description": "Commands and skills for writing and refining commands, hooks, skills for Claude Code, includes Anthropic Best Practices and Agent Persuasion Principles that can be useful for sub-agent workflows.",
   "author": {
-    "name": "Vlad Goncharov",
-    "email": "vlad.goncharov@neolab.finance"
+    "name": "John Wozniak",
+    "email": "jwozniak.dev@gmail.com"
   }
 }
