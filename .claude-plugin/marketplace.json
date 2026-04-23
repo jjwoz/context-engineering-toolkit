@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "jjwoz-context-engineering-toolkit",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": "Hand-crafted collection of advanced context engineering techniques and patterns with minimal token footprint focused on improving agent result quality.",
   "owner": {
     "name": "jjwoz",
@@ -154,7 +154,7 @@
     {
       "name": "gamify",
       "description": "PR velocity and gamified PR splitting skills. Includes pr-pace (rolling 7-day velocity nudges injected into work-on and pr-create-from-commits), work-on (Jira ticket context with branch management and pace awareness), and gamify (intelligent PR decomposition using SDD agents and reflexion judges — splits any PR or branch into reviewable chained PRs with Jira sub-tickets).",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "author": {
         "name": "John Wozniak",
         "email": "jwozniak.dev@gmail.com"

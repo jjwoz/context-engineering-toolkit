@@ -1,31 +1,9 @@
 {
   "name": "gamify",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "PR velocity and gamified PR splitting skills. Includes pr-pace (rolling 7-day velocity nudges injected into work-on and pr-create-from-commits), work-on (Jira ticket context with branch management and pace awareness), and gamify (intelligent PR decomposition using SDD agents and reflexion judges — splits any PR or branch into reviewable chained PRs with Jira sub-tickets).",
   "author": {
     "name": "John Wozniak",
     "email": "jwozniak.dev@gmail.com"
-  },
-  "license": "MIT",
-  "tokens": {
-    "estimated": 2500,
-    "description": "Skills load on-demand. gamify is the largest (~1500 tokens), pr-pace (~600), work-on (~400). Token cost scales with which skills are active."
-  },
-  "skills": [
-    {
-      "name": "gamify",
-      "description": "Intelligent PR decomposition — splits any oversized PR or branch into reviewable chained PRs with Jira sub-tickets, using SDD agents for semantic classification and reflexion judges for consensus validation.",
-      "path": "skills/gamify/SKILL.md"
-    },
-    {
-      "name": "pr-pace",
-      "description": "PR pace awareness — computes rolling 7-day PR count, emits pace status nudges into /work-on and /pr-create-from-commits, and can orchestrate full PR splits end-to-end.",
-      "path": "skills/pr-pace/SKILL.md"
-    },
-    {
-      "name": "work-on",
-      "description": "Start working on a Jira ticket by gathering context (ticket details, branches, PRs) and offering actions. Use when the user runs /work-on or wants Jira ticket context and branch/PR info.",
-      "path": "skills/work-on/SKILL.md"
-    }
-  ]
+  }
 }
