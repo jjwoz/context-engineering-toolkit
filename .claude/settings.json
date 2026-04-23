@@ -1,0 +1,6 @@
+{
+  "enabledPlugins": {
+    "sdd@jjwoz-context-engineering-toolkit": true,
+    "sadd@jjwoz-context-engineering-toolkit": true
+  }
+}
